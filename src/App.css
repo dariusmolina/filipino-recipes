@@ -1,0 +1,12 @@
+/* App.css */
+.app {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  align-content: center;
+  padding-top: 70px;
+}
+
+.recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+}
