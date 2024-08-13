@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/filipino-recipes/static/css/main.f64537d7.css",
+    "main.js": "/filipino-recipes/static/js/main.8615a82c.js",
+    "index.html": "/filipino-recipes/index.html",
+    "main.f64537d7.css.map": "/filipino-recipes/static/css/main.f64537d7.css.map",
+    "main.8615a82c.js.map": "/filipino-recipes/static/js/main.8615a82c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f64537d7.css",
+    "static/js/main.8615a82c.js"
+  ]
+}
