@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./RecipeForm.css";
+import { db } from "./firebase"; // Import Firestore
+import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 
-const RecipeForm = ({ setRecipes, addRecipe }) => {
+const RecipeForm = ({ setRecipes }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState("");
@@ -9,76 +11,81 @@ const RecipeForm = ({ setRecipes, addRecipe }) => {
   const [photo, setPhoto] = useState(null);
   const [instructions, setInstructions] = useState("");
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhoto(reader.result); // Set base64 string
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const newRecipe = {
-      id: Date.now(),
       title,
-      category,
       description,
       ingredients,
+      category,
       instructions,
-      photo: photo || null, // Save base64 string
+      photo,
     };
-    setRecipes((prevRecipes) => {
-      const updatedRecipes = [...prevRecipes, newRecipe];
-      localStorage.setItem("recipes", JSON.stringify(updatedRecipes)); // Save to local storage
-      return updatedRecipes;
-    });
-    setTitle("");
-    setDescription("");
-    setIngredients("");
-    setCategory("");
-    setPhoto(null);
-    setInstructions("");
+
+    try {
+      // Add the new recipe to Firestore
+      await addDoc(collection(db, "recipes"), newRecipe);
+      alert("Recipe added successfully!");
+
+      // Clear the form fields
+      setTitle("");
+      setDescription("");
+      setIngredients("");
+      setCategory("");
+      setInstructions("");
+      setPhoto(null);
+    } catch (error) {
+      console.error("Error adding recipe:", error);
+      alert("Failed to add recipe. Please try again.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="recipe-form">
-      <h2>Add Your Recipe!</h2>
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="" disabled>
-          Category
-        </option>
-        <option value="breakfast">Breakfast</option>
-        <option value="lunch">Lunch</option>
-        <option value="dinner">Dinner</option>
-        <option value="dessert">Dessert</option>
-      </select>
+      <h2>Add a New Recipe</h2>
       <input
         type="text"
-        placeholder="Recipe Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        placeholder="Recipe Title"
+        required
       />
       <textarea
-        placeholder="Recipe Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        placeholder="Recipe Description"
+        required
       />
       <textarea
-        placeholder="Ingredients (Ex: 1/4 Cup of water)"
         value={ingredients}
         onChange={(e) => setIngredients(e.target.value)}
+        placeholder="Ingredients (one per line)"
+        required
       />
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        required
+      >
+        <option value="">Select a category</option>
+        <option value="appetizer">Appetizer</option>
+        <option value="main">Main Course</option>
+        <option value="dessert">Dessert</option>
+        <option value="beverage">Beverage</option>
+      </select>
       <textarea
-        placeholder="Instructions (Numbered and separated by line)"
         value={instructions}
         onChange={(e) => setInstructions(e.target.value)}
+        placeholder="Cooking Instructions"
+        required
       />
-      <input type="file" onChange={handlePhotoChange} />
-      <button type="submit">Submit</button>
+      <input
+        type="file"
+        onChange={(e) => setPhoto(e.target.files[0])}
+        accept="image/*"
+      />
+      <button type="submit">Submit Recipe</button>
     </form>
   );
 };

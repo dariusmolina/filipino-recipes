@@ -20,6 +20,21 @@ const Navbar = ({ onSearch }) => {
         <Link className="navbar-brand" to="/">
           Filipino Recipe Blog
         </Link>
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search recipes..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearchSubmit();
+            }}
+          />
+          <button className="search-button" onClick={handleSearchSubmit}>
+            <span className="sr-only">Search</span>
+          </button>
+        </div>
         <div className="navbar-items">
           <Link className="nav-link" to="/recipes">
             Recipes
@@ -30,21 +45,9 @@ const Navbar = ({ onSearch }) => {
           <Link className="nav-link" to="/about">
             About
           </Link>
-          <div className="search-container">
-            <input
-              type="text"
-              className="search-bar"
-              placeholder="Search recipes..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearchSubmit();
-              }}
-            />
-            <button className="search-button" onClick={handleSearchSubmit}>
-              <span className="sr-only">Search</span>
-            </button>
-          </div>
+          <Link className="nav-link" to="/auth">
+            Login/Signup
+          </Link>
         </div>
       </div>
     </nav>

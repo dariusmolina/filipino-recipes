@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import RecipeForm from "./RecipeForm";
 import RecipeList from "./RecipeList";
 import RecipeDetailPage from "./RecipeDetailPage"; // Import RecipeDetailPage
 import AboutPage from "./AboutPage";
 import SearchResultsPage from "./SearchResultsPage"; // Import SearchResultsPage
+import Signup from "./Signup"; // Import the Signup component
 import "./App.css";
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
             path="/search"
             element={<SearchResultsPage recipes={recipes} />}
           />
+          <Route path="/auth" element={<Signup />} /> {/* Add this new route */}
         </Routes>
       </div>
     </Router>
